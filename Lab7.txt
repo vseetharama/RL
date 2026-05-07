@@ -1,0 +1,92 @@
+import React, { useState } from "react";
+import "./index.css";
+import sampleimage from "./assets/sampleimage.jpg";
+
+const ProfileCard = ({ name, bio, initialBg }) => {
+
+  const [bg, setBg] = useState(initialBg);
+
+  return (
+
+    <div
+      className="card"
+      style={{ background: bg }}
+
+      onMouseEnter={() =>
+        setBg("linear-gradient(135deg, #FFD700, #FFA07A)")
+      }
+
+      onMouseLeave={() =>
+        setBg(initialBg)
+      }
+    >
+
+      <img
+        src={sampleimage}
+        alt={name}
+        className="pic"
+      />
+
+      <h2>{name}</h2>
+
+      <p>{bio}</p>
+
+    </div>
+  );
+};
+
+export default function App() {
+
+  return (
+
+    <div className="container">
+
+      <ProfileCard
+        name="Steve Jobs"
+        bio="Co-founder of Apple Inc."
+        initialBg="linear-gradient(135deg, #ADD8E6, #E6E6FA)"
+      />
+
+    </div>
+  );
+}
+
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.card {
+  width: 300px;
+  padding: 20px;
+  border-radius: 15px;
+  text-align: center;
+  color: black;
+  transition: 0.3s;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.pic {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+h2 {
+  margin-top: 15px;
+}
+
+p {
+  font-size: 16px;
+}
