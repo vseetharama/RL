@@ -1,0 +1,598 @@
+9.
+main.jsx
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
+import App from './App.jsx';
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render( <BrowserRouter> <App /> </BrowserRouter> );
+
+📄 App.jsx
+import React from 'react';
+import { Routes, Route, NavLink } from 'react-router-dom';
+
+import Home from './Home.jsx';
+import About from './About.jsx';
+import Contact from './Contact.jsx';
+function App() {
+  const linkStyle = ({ isActive }) => ({
+    margin: '0 10px',
+    textDecoration: 'none',
+    color: isActive ? 'blue' : 'black',
+    fontWeight: isActive ? 'bold' : 'normal'
+  });
+  return (
+    <div>
+      <nav
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          gap: '20px',
+          padding: '10px'
+        }}
+      >
+        <NavLink to="/" style={linkStyle} end>   Home </NavLink>
+        <NavLink to="/about" style={linkStyle}>  About </NavLink>
+        <NavLink to="/contact" style={linkStyle}> Contact </NavLink>
+      </nav>
+      <hr />
+      <Routes>
+        <Route  path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />}/>
+      </Routes>
+   </div>
+  );
+}
+
+export default App;
+📄 Home.jsx
+import React from 'react';
+
+function Home() {
+  return (
+    <h2>Home Page</h2>
+  );
+}
+
+export default Home;
+📄 About.jsx
+import React from 'react';
+
+function About() {
+  return (
+    <h2>About Page</h2>
+  );
+}
+
+export default About;
+📄 Contact.jsx
+import React from 'react';
+
+function Contact() {
+  return (
+    <h2>Contact Page</h2>
+  );
+}
+
+export default Contact;
+
+8.
+import React, { useState } from "react";
+import "./index.css";
+
+export default function App() {
+
+  const [tasks, setTasks] = useState([]);
+  const [filter, setFilter] = useState("all");
+  const [form, setForm] = useState({ name: "", date: "", desc: "" });
+
+  const addTask = (e) => {
+    e.preventDefault();
+
+    if (form.name && form.date) {
+      setTasks([...tasks, { ...form, done: false }]);
+      setForm({ name: "", date: "", desc: "" });
+    }
+  };
+
+  const toggleTask = (i) => {
+    setTasks(
+      tasks.map((t, j) =>
+        j === i ? { ...t, done: !t.done } : t
+      )
+    );
+  };
+
+  return (
+    <div className="app">
+
+      <h1>Reminder App</h1>
+
+      <form onSubmit={addTask}>
+
+        {["name", "date", "desc"].map((k) => (
+          <input
+            key={k}
+            type={k === "date" ? "date" : "text"}
+            placeholder={k}
+            value={form[k]}
+            onChange={(e) => setForm({ ...form, [k]: e.target.value })}
+          />
+        ))}
+
+        <button type="submit">Add</button>
+
+      </form>
+
+      <div className="filters">
+
+        {["all", "done", "notdone"].map((v) => (
+          <button key={v} onClick={() => setFilter(v)}>
+            {v}
+          </button>
+        ))}
+
+      </div>
+
+      <ul>
+
+        {tasks
+          .filter(
+            (t) =>
+              filter === "all" ||
+              (filter === "done" && t.done) ||
+              (filter === "notdone" && !t.done)
+          )
+          .map((t, i) => (
+            <li
+              key={i}
+              onClick={() => toggleTask(i)}
+              className={t.done ? "done" : ""}
+            >
+              <b>{t.name}</b> - {t.date} {t.desc && `| ${t.desc}`}
+            </li>
+          ))}
+
+      </ul>
+
+    </div>
+  );
+}
+
+index.css
+/* General app styling */
+.app {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 20px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  font-family: Arial, sans-serif;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* Heading */
+.app h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Form styling */
+form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+form input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+form button {
+  padding: 8px 16px;
+  background: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+form button:hover {
+  background: #45a049;
+}
+
+/* Filter buttons */
+.filters {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.filters button {
+  margin: 0 5px;
+  padding: 6px 12px;
+  border: 1px solid #4caf50;
+  background: white;
+  color: #4caf50;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.filters button:hover {
+  background: #4caf50;
+  color: white;
+}
+
+/* Task list */
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  padding: 10px;
+  margin-bottom: 8px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+li:hover {
+  background: #f1f1f1;
+}
+
+/* Completed tasks */
+li.done {
+  text-decoration: line-through;
+  color: #888;
+  background: #e0ffe0;
+}
+7.txt
+import React, { useState } from "react";
+import "./index.css";
+import sampleimage from "./assets/sampleimage.jpg";
+
+const ProfileCard = ({ name, bio, initialBg }) => {
+
+  const [bg, setBg] = useState(initialBg);
+
+  return (
+
+    <div
+      className="card"
+      style={{ background: bg }}
+
+      onMouseEnter={() =>
+        setBg("linear-gradient(135deg, #FFD700, #FFA07A)")
+      }
+
+      onMouseLeave={() =>
+        setBg(initialBg)
+      }
+    >
+
+      <img
+        src={sampleimage}
+        alt={name}
+        className="pic"
+      />
+
+      <h2>{name}</h2>
+
+      <p>{bio}</p>
+
+    </div>
+  );
+};
+
+export default function App() {
+
+  return (
+
+    <div className="container">
+
+      <ProfileCard
+        name="Steve Jobs"
+        bio="Co-founder of Apple Inc."
+        initialBg="linear-gradient(135deg, #ADD8E6, #E6E6FA)"
+      />
+
+    </div>
+  );
+}
+
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.card {
+  width: 300px;
+  padding: 20px;
+  border-radius: 15px;
+  text-align: center;
+  color: black;
+  transition: 0.3s;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.pic {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+h2 {
+  margin-top: 15px;
+}
+
+p {
+  font-size: 16px;
+}
+
+6.txt
+import { useState, useEffect } from "react";
+import "./index.css";
+
+export default function App() {
+
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: ""
+  });
+
+  const [error, setError] = useState("");
+  const [show, setShow] = useState(false);
+  const [data, setData] = useState(null);
+
+  // Validation using useEffect
+  useEffect(() => {
+
+    if (!form.name || !form.email || !form.password) {
+      setError("All fields are required");
+    }
+
+    else if (
+      !form.email.includes("@") ||
+      !form.email.includes(".")
+    ) {
+      setError("Enter valid email");
+    }
+
+    else if (form.password.length < 6) {
+      setError("Password must be 6 characters");
+    }
+
+    else {
+      setError("");
+    }
+
+  }, [form]);
+
+  const handleSubmit = (e) => {
+
+    e.preventDefault();
+
+    if (error === "") {
+
+      setData(form);
+
+      setForm({
+        name: "",
+        email: "",
+        password: ""
+      });
+    }
+  };
+
+  return (
+
+    <div className="container">
+
+      <div className="card">
+
+        <h2>Registration Form</h2>
+
+        <form onSubmit={handleSubmit}>
+
+          <input
+            type="text"
+            placeholder="Enter Name"
+            value={form.name}
+            onChange={(e) =>
+              setForm({ ...form, name: e.target.value })
+            }
+          />
+
+          <input
+            type="email"
+            placeholder="Enter Email"
+            value={form.email}
+            onChange={(e) =>
+              setForm({ ...form, email: e.target.value })
+            }
+          />
+
+          <input
+            type={show ? "text" : "password"}
+            placeholder="Enter Password"
+            value={form.password}
+            onChange={(e) =>
+              setForm({ ...form, password: e.target.value })
+            }
+          />
+
+          <label>
+
+            <input
+              type="checkbox"
+              onChange={() => setShow(!show)}
+            />
+
+            Show Password
+
+          </label>
+
+          <button type="submit">
+            Submit
+          </button>
+
+        </form>
+
+        {error && <p className="error">{error}</p>}
+
+      </div>
+
+      {data && (
+
+        <div className="result">
+
+          <h3>Submitted Data</h3>
+
+          <p>Name: {data.name}</p>
+          <p>Email: {data.email}</p>
+          <p>Password: {data.password}</p>
+
+        </div>
+
+      )}
+
+    </div>
+  );
+}
+
+
+body {
+  font-family: Arial;
+  background: #f4f4f4;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 40px;
+}
+
+.card {
+  width: 300px;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px gray;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 10px;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  background: green;
+  color: white;
+  border: none;
+}
+
+.error {
+  color: red;
+}
+
+.result {
+  margin-top: 20px;
+  background: white;
+  padding: 15px;
+  width: 300px;
+  border-radius: 10px;
+}
+10.txt
+  import { useState, useEffect } from "react";
+  
+  export default function App() {
+  
+    const [users, setUsers] = useState([]);
+    const [search, setSearch] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
+  
+    const fetchUsers = async () => {
+  
+      setLoading(true);
+  
+      try {
+        const res = await fetch(
+          "https://jsonplaceholder.typicode.com/users"
+        );
+        const data = await res.json();
+        setUsers(data);
+        setError("");
+      }
+      catch {
+        setError("Failed to fetch data");
+      }
+      setLoading(false);
+    };
+    useEffect(() => {
+      fetchUsers();
+    }, []);
+    const filteredUsers = users.filter((u) =>
+      u.name.toLowerCase().includes(search.toLowerCase())
+    );
+    return (
+      <div>
+        <h1>User Data</h1>
+        <input
+          type="text"
+          placeholder="Search User"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        <button onClick={fetchUsers}>
+          Refresh
+        </button>
+        {loading && <p>Loading...</p>}
+        {error && <p>{error}</p>}
+        <table border="1">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>City</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredUsers.map((u) => (
+              <tr key={u.id}>
+                <td>{u.name}</td>
+                <td>{u.email}</td>
+                <td>{u.address.city}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  }
